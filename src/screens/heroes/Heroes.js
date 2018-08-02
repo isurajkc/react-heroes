@@ -8,7 +8,7 @@ class Heroes extends Component {
       heroes: [],
       searchResults: []
     };
-    this.apiUrl = "http://5b4addaf30ebac001419f251.mockapi.io/api/messages";
+    this.apiUrl = "https://mac.localhost.run/people";
   }
 
   componentDidMount() {
