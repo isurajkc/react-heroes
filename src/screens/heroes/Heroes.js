@@ -1,14 +1,17 @@
 import React, { Component } from "react";
-import { HeroForm, HeroList, HeroSearch } from "components";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { HeroForm, HeroList, Search } from "components";
+import Add from "components/add";
 
 class Heroes extends Component {
   constructor(props) {
     super(props);
     this.state = {
       heroes: [],
-      searchResults: []
+      searchKeyword: '',
+      searchedHeroes: []
     };
-    this.apiUrl = "http://5b4addaf30ebac001419f251.mockapi.io/api/messages";
+    this.apiUrl = "http://localhost:4000/superheros";
   }
 
   componentDidMount() {
@@ -19,9 +22,9 @@ class Heroes extends Component {
     fetch(this.apiUrl)
       .then(res => res.json())
       .then(data => {
-        console.log("data:", data);
         this.setState({
-          heroes: data
+          heroes: data,
+          searchedHeroes: data,
         });
       });
   }
@@ -45,26 +48,34 @@ class Heroes extends Component {
     this.setState({ heroes });
   };
 
-  search = e => {
-    const heroes = this.state.heroes;
+  onSearch = e => {
+    const value = e.target.value;
+    let searchedHeroes = this.state.heroes;
+    console.log(value);
 
-    const searchResults = heroes.filter(hero => {
-      const name = hero.name.toLowerCase();
-      return name.match(e.target.value.toLowerCase());
-    });
+    if(value){
+      searchedHeroes = searchedHeroes.filter(hero => {
+        const name = hero.name.toLowerCase();
+        return name.match(value.toLowerCase());
+      });
+    }
 
-    this.setState({ searchResults: searchResults });
+    this.setState({ searchedHeroes, searchKeyword: e.target.value });
   };
 
   render() {
-    const { heroes, searchResults } = this.state;
+    const { heroes, searchKeyword, searchedHeroes } = this.state;
 
     return (
-      <section>
-        <HeroSearch search={this.search} searchResults={searchResults} />
-        <HeroForm addHero={this.addHero} />
-        <HeroList heroes={heroes} deleteItem={this.deleteHero} />
-      </section>
+      <BrowserRouter> 
+        <section className="content">
+          <Switch>
+            <Route exact path="/" component={HeroList} />
+            <Route exact path="/add" component={Add} />
+          </Switch>
+          <Route exact path="/" render={() => <Link to="/add" className="add-button"><span>+</span></Link>} />
+        </section>
+      </BrowserRouter>
     );
   }
 }

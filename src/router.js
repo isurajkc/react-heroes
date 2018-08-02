@@ -5,21 +5,15 @@ import { Home, Heroes, HeroDetail } from "screens";
 class Router extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <div>
-          <header>
-            <h1>
-              <a href="/">Tour of Heroes</a>
-            </h1>
-          </header>
-
-          <Switch>
-            <Route exact path="/" component={Heroes} />
-            <Route exact path="/heroes" component={Heroes} />
-            <Route exact path="/heroes/:id" component={HeroDetail} />
-          </Switch>
-        </div>
-      </BrowserRouter>
+      <div className="container">
+        <aside>
+          <h1><a href="/" className="logo">
+            <small>Tour of </small>
+            Super<span>heroes</span>
+          </a></h1>
+        </aside>
+        <Heroes />
+      </div>
     );
   }
 }
